@@ -11,20 +11,31 @@ import * as frames from '@wpay/frames';
 import * as Axios from 'axios';
 
 const secondsSinceEpoch = Math.round(Date.now() / 1000);
-const baseUrl = 'https://uat.mobile-api.woolworths.com.au/wow/v1';
+const baseUrl = 'https://dev.mobile-api.woolworths.com.au/wow/v1';
 
 const apiKey = 'haTdoUWVhnXm5n75u6d0VG67vCCvKjQC';
 const merchantId = '10006';
 const framesApiBaseUrl = `${baseUrl}/pay/instore`;
-const walletApiBaseUrl = 'https://uat-api.wpay.com.au/wow/v1/pay';
+const walletApiBaseUrl = 'https://dev-api.wpay.com.au/wow/v1/pay';
 
-let authorizationToken: ApiTokenType = '7U7rzUWbLPDKIdA2ZxRF69TzKtJS';
+let authorizationToken: ApiTokenType = '';
 let action: any;
 let customerSDK: WPayCustomerApi;
 let tokenizedInstrument: any;
 let submitCardBtn: HTMLButtonElement;
 let makePaymentBtn: HTMLButtonElement;
 let paymentRequestId: string;
+let enableSaveButton = false;
+const visitedStatus: any = {}
+
+const errorMap: Map<string, string> = new Map([
+    ['Card No. Required', 'Please enter a valid card number.'],
+    ['Invalid Card No.', 'Please enter a valid card number.'],
+    ['Invalid Expiry', 'Please enter a valid expiry.'],
+    ['Incomplete Expiry', 'Please enter a valid expiry'],
+    ['Expired card', 'The expiry entered is in the past. Please enter a valid expiry.'],
+    ['Invalid CVV', 'Please enter a valid CVV.']
+]);
 
 //Instantiate the frames SDK, this will allow us to capture user card infromation.
 const framesSDK = new frames.ElementsSDK(
@@ -54,7 +65,6 @@ window.onload = async () => {
     console.log("action.createElement('CardGroup', 'cardCapturePlaceholder')");
     action.createElement('CardGroup', 'cardCapturePlaceholder');
  
-    console.log("Add event listeners:")
     if (document.getElementById('cardCapturePlaceholder') !== null) {
         console.log('Add cardCaptureCardNo - cardCaptureCardNo - eventListener - OnValidated');
 
@@ -95,15 +105,6 @@ window.onload = async () => {
     makePaymentBtn.onclick = makePayment;
 };
 
-const errorMap: Map<string, string> = new Map([
-    ['Card No. Required', 'Please enter a valid card number.'],
-    ['Invalid Card No.', 'Please enter a valid card number.'],
-    ['Invalid Expiry', 'Please enter a valid expiry.'],
-    ['Incomplete Expiry', 'Please enter a valid expiry'],
-    ['Expired card', 'The expiry entered is in the past. Please enter a valid expiry.'],
-    ['Invalid CVV', 'Please enter a valid CVV.']
-]);
-
 async function updateErrors() {
     const errors = action.errors();
     if (errors !== undefined && errors.length > 0) { 
@@ -115,9 +116,6 @@ async function updateErrors() {
         document.getElementById('cardCaptureErrors')!.innerHTML = "";
     }
 }
-
-const visitedStatus: any = {}
-let enableSaveButton = false;
 
 async function setVisitedStatus(event: any) {
     console.log("setVisitedStatus called.");
