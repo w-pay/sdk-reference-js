@@ -2,7 +2,7 @@
 
 ## Project setup
 
-### Use combatible node version
+### Use compatible node version
 
 The `nvm use` command will use the node version documented in the file `.nvmrc` file.
 This command assumes you have node version manager (`nvm`) installed.
