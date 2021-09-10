@@ -62,39 +62,34 @@ window.onload = async () => {
 
     // Populate the placeholder div with the card capture inputs. In this case we
     // are using the 'CardGroup'
-    console.log("action.createElement('CardGroup', 'cardCapturePlaceholder')");
     action.createElement('CardGroup', 'cardCapturePlaceholder');
  
-    if (document.getElementById('cardCapturePlaceholder') !== null) {
-        console.log('Add cardCaptureCardNo - cardCaptureCardNo - eventListener - OnValidated');
+    // Add OnValidated Eventlistener which will cause the updateErrors
+    // function to be called if a validation error is encoutned in the
+    // frames SDK while entering a Credit Card details.
+    document.getElementById('cardCapturePlaceholder')!
+        .addEventListener(
+            frames.ElementEventType.OnValidated,
+            updateErrors
+        );
 
-        // Add OnValidated Eventlistener which will cause the updateErrors
-        // function to be called if a validation error is encoutned in the
-        // frames SDK while entering a Credit Card details.
-        document.getElementById('cardCapturePlaceholder')!
-            .addEventListener(
-                frames.ElementEventType.OnValidated,
-                updateErrors
-            );
+    // Add OnFocus Eventlistener which is fired when a field is focused in the frames SDK.
+    // This enables you to know if all fields have been visited and the credit card is ready
+    // for submission.
+    document.getElementById('cardCapturePlaceholder')!
+        .addEventListener(
+            frames.ElementEventType.OnFocus,
+            setVisitedStatus
+        );
 
-        // Add OnFocus Eventlistener which is fired when a field is focused in the frames SDK.
-        // This enables you to know if all fields have been visited and the credit card is ready
-        // for submission.
-        document.getElementById('cardCapturePlaceholder')!
-            .addEventListener(
-                frames.ElementEventType.OnFocus,
-                setVisitedStatus
-            );
-
-        // Add OnBlur Eventlistener which is fired when a field is exited in the frames SDK.
-        // This enables you to check for errors and visited fields to see if the credit card 
-        // is ready for submission.
-        document.getElementById('cardCapturePlaceholder')!
-            .addEventListener(
-                frames.ElementEventType.OnBlur,
-                checkVisitedStatus
-            );
-    }
+    // Add OnBlur Eventlistener which is fired when a field is exited in the frames SDK.
+    // This enables you to check for errors and visited fields to see if the credit card 
+    // is ready for submission.
+    document.getElementById('cardCapturePlaceholder')!
+        .addEventListener(
+            frames.ElementEventType.OnBlur,
+            checkVisitedStatus
+        );
 
     submitCardBtn = document.getElementById('submitCard') as HTMLButtonElement;
     makePaymentBtn = document.getElementById(
@@ -118,7 +113,6 @@ async function updateErrors() {
 }
 
 async function setVisitedStatus(event: any) {
-    console.log("setVisitedStatus called.");
     if (event && event.detail && event.detail.control) {
         visitedStatus[event.detail.control] = true;
         checkVisitedStatus();
