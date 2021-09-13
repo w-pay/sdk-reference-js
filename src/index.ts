@@ -25,6 +25,17 @@ let tokenizedInstrument: any;
 let submitCardBtn: HTMLButtonElement;
 let makePaymentBtn: HTMLButtonElement;
 let paymentRequestId: string;
+let enableSaveButton = false;
+const visitedStatus: any = {}
+
+const errorMap: Map<string, string> = new Map([
+    ['Card No. Required', 'Please enter a valid card number.'],
+    ['Invalid Card No.', 'Please enter a valid card number.'],
+    ['Invalid Expiry', 'Please enter a valid expiry.'],
+    ['Incomplete Expiry', 'Please enter a valid expiry'],
+    ['Expired card', 'The expiry entered is in the past. Please enter a valid expiry.'],
+    ['Invalid CVV', 'Please enter a valid CVV.']
+]);
 
 //Instantiate the frames SDK, this will allow us to capture user card infromation.
 const framesSDK = new frames.ElementsSDK(
@@ -52,6 +63,33 @@ window.onload = async () => {
     // Populate the placeholder div with the card capture inputs. In this case we
     // are using the 'CardGroup'
     action.createElement('CardGroup', 'cardCapturePlaceholder');
+ 
+    // Add OnValidated Eventlistener which will cause the updateErrors
+    // function to be called if a validation error is encoutned in the
+    // frames SDK while entering a Credit Card details.
+    document.getElementById('cardCapturePlaceholder')!
+        .addEventListener(
+            frames.ElementEventType.OnValidated,
+            updateErrors
+        );
+
+    // Add OnFocus Eventlistener which is fired when a field is focused in the frames SDK.
+    // This enables you to know if all fields have been visited and the credit card is ready
+    // for submission.
+    document.getElementById('cardCapturePlaceholder')!
+        .addEventListener(
+            frames.ElementEventType.OnFocus,
+            setVisitedStatus
+        );
+
+    // Add OnBlur Eventlistener which is fired when a field is exited in the frames SDK.
+    // This enables you to check for errors and visited fields to see if the credit card 
+    // is ready for submission.
+    document.getElementById('cardCapturePlaceholder')!
+        .addEventListener(
+            frames.ElementEventType.OnBlur,
+            checkVisitedStatus
+        );
 
     submitCardBtn = document.getElementById('submitCard') as HTMLButtonElement;
     makePaymentBtn = document.getElementById(
@@ -61,6 +99,38 @@ window.onload = async () => {
     submitCardBtn.onclick = captureCard;
     makePaymentBtn.onclick = makePayment;
 };
+
+async function updateErrors() {
+    const errors = action.errors();
+    if (errors !== undefined && errors.length > 0) { 
+
+        document.getElementById('cardCaptureErrors')!.innerHTML =
+            `${errorMap.get(errors[0]) ? errors[0] + ' - ' + errorMap.get(errors[0]) : errors[0]}`;
+
+    } else {
+        document.getElementById('cardCaptureErrors')!.innerHTML = "";
+    }
+}
+
+async function setVisitedStatus(event: any) {
+    if (event && event.detail && event.detail.control) {
+        visitedStatus[event.detail.control] = true;
+        checkVisitedStatus();
+    };
+}
+
+async function checkVisitedStatus() {
+    const keys = [ 'cardNo', 'cardExpiry', 'cardCVV'];
+    for (const key of keys) {
+        if (!visitedStatus[key]) return;
+    }
+    if (action.errors() === undefined || action.errors().length === 0) {
+        enableSaveButton = true;
+    } else {
+        enableSaveButton = false;
+    }
+    (document.getElementById("submitCard")! as HTMLButtonElement).disabled = !enableSaveButton;
+}
 
 async function captureCard() {
     //Capture the card inputted by the user

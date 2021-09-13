@@ -15,7 +15,6 @@
                 border-radius: 5px;
                 padding: 0 20px;
             }
-
             .collapsible-section {
                 max-height: 0;
                 overflow: hidden;
@@ -32,7 +31,7 @@
                 flex-direction: column;
             }
             #cardCapturePlaceholder {
-                height: 67px;
+                height: 50px;
                 position: relative;
             }
             #cardCapturePlaceholder iframe {
@@ -40,6 +39,10 @@
                 border: solid 1px #777;
                 padding: 5px;
                 border-radius: 5px;
+            }
+            #cardCaptureErrors {
+                height: 30px;
+                color: red;
             }
         </style>
     </head>
@@ -54,9 +57,10 @@
             -->
             <div class="card-capture-container">
                 <div id="cardCapturePlaceholder"></div>
+                <div id="cardCaptureErrors"></div>
             </div>
             
-            <button id="submitCard">Submit</button>
+            <button id="submitCard" disabled>Submit</button>
         </div>
         <div id="paymentSection" class="section center collapsible-section">
             <p><b>Payment: </b> $100</p>
