@@ -1,0 +1,143 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <style>
+            body {
+                font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+                background: #EEE;
+            }
+            .center {
+                margin: 20px auto;
+                width: 60%;
+            }
+            .section {
+                background: #FFF;
+                border-radius: 5px;
+                padding: 0 20px;
+            }
+            .collapsible-section {
+                max-height: 0;
+                overflow: hidden;
+                transition: max-height 0.2s ease-out;
+            }
+            button {
+                margin-bottom: 20px;
+            }
+            .card-capture-container {
+                display: flex;
+                flex-direction: column;
+            }
+            #cardCapturePlaceholder {
+                height: 50px;
+                position: relative;
+            }
+            #cardCapturePlaceholder .woolies-element {
+                width: 99%;
+            }
+            #cardCapturePlaceholder iframe {
+                height: 37px !important;
+                border: solid 1px #777;
+                padding: 5px;
+                border-radius: 5px;
+            }
+            #cardCaptureErrors {
+                height: 30px;
+                color: red;
+            }
+            .container {
+                position: absolute;
+                top: 0;
+                bottom: 0;
+                left: 0;
+                right: 0;
+                display: flex;
+            }
+
+            .content-panel {
+                width: 65%;
+                display: flex;
+                flex-direction: column;
+            }
+
+            .view-panel {
+                min-height: 75%;
+                overflow-y: scroll;
+                padding: 0 30px;
+            }
+
+            .config-panel {
+                border-top: 3px solid black;
+                padding: 0 30px;
+            }
+
+            .code-panel {
+                width: 45%;
+                background: #282c34;
+                border-left: 3px solid black;
+                color: white;
+                overflow-y: scroll;
+                padding: 0 10px;
+            }
+            .padding {
+                padding: 10px;
+            }
+            .hide {
+                display: none;
+            }
+            .btn {
+                padding: 10px 12px;
+                font-size: 1.2em;
+                border-radius: 5px;
+                color: #FFFFFF;
+                background: #565672;
+                cursor: pointer;
+                text-decoration: none;
+            }
+            .btn:hover {
+                background: #40415b;
+                text-decoration: underline;
+            }
+            #transaction-id-input {
+                display: block;
+                margin-bottom: 20px;
+                padding: 10px;
+                font-size: 1.1em;
+                width: 100%;
+                border-radius: 5px;
+                border-width: 1px;
+            }
+        </style>
+        <link rel="stylesheet" href="atom-one-dark.css">
+    </head>
+    <body>
+        <script type="module" src="./merchant.js"></script>
+        <div class="container">
+            <div class="content-panel">
+                <div class="view-panel">
+                    <div class="transaction-panel">
+                        <p>Please provide transaction ID:</p>
+                        <input id="transaction-id-input" />
+                        <div class="text-align: right; width: 100%">
+                        <button id="merchant-searchTxn" class="btn">Search Transaction</button>
+                        </div>
+                    </div>
+                    <div id="transaction-result-panel" class="collapsible-section">
+                        <p id="transaction-id"></p>
+                        <p id="transaction-type"></p>
+                        <p id="transaction-status"></p>
+
+                        <div class="text-align: right; width: 100%">
+                            <button id="merchant-refundTxn" class="btn">Refund Transaction</button>
+                            <button id="merchant-completeTxn" class="btn">Complete Transaction</button>
+                            <button id="merchant-voidTxn" class="btn">Void Transaction</button>
+                        </div>
+                    </div>
+                    <div id="results-panel" class="collapsible-section">
+                        <h3>Response:</h3>
+                    </div>
+                </div>
+            </div>
+            <div id="code-panel" class="code-panel"></div>
+        </div>
+    </body>
+</html>

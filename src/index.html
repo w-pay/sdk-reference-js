@@ -6,10 +6,6 @@
                 font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
                 background: #EEE;
             }
-            .center {
-                margin: 20px auto;
-                width: 60%;
-            }
             .section {
                 background: #FFF;
                 border-radius: 5px;
@@ -44,33 +40,63 @@
                 height: 30px;
                 color: red;
             }
+            .btn {
+                padding: 10px 12px;
+                font-size: 1.2em;
+                border-radius: 5px;
+                color: #FFFFFF;
+                background: #565672;
+                cursor: pointer;
+                text-decoration: none;
+                margin: 20px 0;
+                display: inline-block;
+            }
+            .btn:hover {
+                background: #40415b;
+                text-decoration: underline;
+            }
+            .container {
+                width: 70%;
+                margin: 0 auto;
+            }
+            #bearer-input {
+                display: block;
+                margin-bottom: 20px;
+                padding: 10px;
+                font-size: 1.1em;
+                width: 50%;
+                border-radius: 5px;
+                border-width: 1px;
+            }
         </style>
     </head>
     <body>
-        <script type="module" src="./index.js"></script>
-        <h1 class="center">W-Pay JS SDK Example</h1>
-        <div id="cardCaptureSection" class="section center show">
-            <p>First you will need to tokenize a card that can be used to make the payment.</p>
-            <!-- 
-                Card capture placehold div - The Frames SDK will fill this element with the card capture
-                frames.
-            -->
-            <div class="card-capture-container">
-                <div id="cardCapturePlaceholder"></div>
-                <div id="cardCaptureErrors"></div>
-            </div>
-            
-            <button id="submitCard" disabled>Submit</button>
-        </div>
-        <div id="paymentSection" class="section center collapsible-section">
-            <p><b>Payment: </b> $100</p>
-            <p><b>Payment Instrument:</b> <span id="instrumentIdDisplay"></span></p>
-            <p><b>Payment Request:</b> <span id="paymentRequestDisplay"></span></p>
-            <button id="makePayment">Make Payment</button>
-        </div>
-        <div id="responseSection" class="section center collapsible-section">
-            <p><b>Payment Response: </b></p>
-            <p id="responseDisplay"></p>
+        <div class="container">
+            <h1>W-Pay JS SDK Examples</h1>
+            <h3>Basic Example</h3>
+            <p>The basic example page follows the standard payments flow. Tokenizing a card, creating a new payment
+            request and making a payment using the new payment instrument. The code for this example has been thoroughly
+            comment to help explain what is happening.
+            </p>
+            <a class="btn" id="basic-btn" href="./basic-example.html">Open Basic Example</a>
+            <h3>Client Example</h3>
+            <p>This example represents the flow that would be followed by a client using a merchant website to make a payment.
+            It follows the immediate payments flow which does not require the merchant to initialise a new payment request and
+            includes a configuration panel on the page allowing you to turn 3DS checking or switch between making a Payment or
+            a Preauth transaction. The page also includes a code examples window that shows the SDK methods called as part of
+            each step.
+            </p>
+            <p>The transactionId can be copied from the output of this page over to the Merchant Service Portal Example in
+            order to process refunds, completions and voids.
+            </p>
+            <a class="btn" id="client-btn" href="./client.html">Open Client Example</a>
+            <h3>Merchant Service Portal Example</h3>
+            <p>This example represents an internal page for the Merchant where they can process customer refunds, completions
+            and voids. This functionality should only be initiated from the merchant side and never directly from a customer
+            facing page. The Merchant Service Portal Example includes the same code example window as the Client Example
+            to show the SDK methods being used.
+            </p>
+            <a class="btn" id="merchant-btn" href="./merchant.html">Open Merchant Service Portal Example</a>
         </div>
     </body>
 </html>

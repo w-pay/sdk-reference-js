@@ -1,0 +1,160 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <style>
+            body {
+                font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+                background: #EEE;
+            }
+            .center {
+                margin: 20px auto;
+                width: 60%;
+            }
+            .section {
+                background: #FFF;
+                border-radius: 5px;
+                padding: 0 20px;
+            }
+            .collapsible-section {
+                max-height: 0;
+                overflow: hidden;
+                transition: max-height 0.2s ease-out;
+            }
+            button {
+                margin-bottom: 20px;
+            }
+            .card-capture-container {
+                display: flex;
+                flex-direction: column;
+            }
+            #cardCapturePlaceholder {
+                height: 50px;
+                position: relative;
+            }
+            #cardCapturePlaceholder .woolies-element {
+                width: 99%;
+            }
+            #cardCapturePlaceholder iframe {
+                height: 37px !important;
+                border: solid 1px #777;
+                padding: 5px;
+                border-radius: 5px;
+            }
+            #cardCaptureErrors {
+                height: 30px;
+                color: red;
+            }
+
+            .container {
+                position: absolute;
+                top: 0;
+                bottom: 0;
+                left: 0;
+                right: 0;
+                display: flex;
+            }
+
+            .content-panel {
+                width: 55%;
+                display: flex;
+                flex-direction: column;
+            }
+
+            .view-panel {
+                min-height: 75%;
+                overflow-y: scroll;
+                padding: 0 30px;
+            }
+
+            .config-panel {
+                border-top: 3px solid black;
+                padding: 0 30px;
+            }
+
+            .code-panel {
+                width: 45%;
+                background: #282c34;
+                border-left: 3px solid black;
+                color: white;
+                overflow-y: scroll;
+                padding: 0 10px;
+            }
+            .padding {
+                padding: 10px;
+            }
+            .btn {
+                padding: 10px 12px;
+                font-size: 1.2em;
+                border-radius: 5px;
+                color: #FFFFFF;
+                background: #565672;
+                cursor: pointer;
+                text-decoration: none;
+            }
+            .btn:hover {
+                background: #40415b;
+                text-decoration: underline;
+            }
+            .btn-lg {
+                width: 100%;
+            }
+
+            .btn:disabled {
+                background: #9090ae;
+                color: lightgrey;
+            }
+
+            .btn-toggle {
+                display: inline-block;
+                background: white;
+                color: black;
+            }
+
+            .btn-toggle:first-of-type {
+                border-radius: 5px 0 0 5px;
+            }
+            
+            .btn-toggle:last-of-type {
+                border-radius: 0 5px 5px 0;
+            }
+
+            .btn-toggle.selected {
+                color: #FFFFFF;
+                background: #565672;
+            }
+        </style>
+        <link rel="stylesheet" href="atom-one-dark.css">
+    </head>
+    <body>
+        <script type="module" src="./client.js"></script>
+        <div class="container">
+            <div class="content-panel">
+                <div class="view-panel">
+                    <div class="card-capture-panel">
+                        <p>Please provide card information:</p>
+                        <div class="card-capture-container">
+                            <div id="cardCapturePlaceholder"></div>
+                            <div id="cardCaptureErrors"></div>
+                        </div>
+                        <div style="text-align: right; width: 100%;">
+                            <button id="client-submitCard" class="btn" disabled>Submit</button>
+                        </div>
+                    </div>
+                    <div id="payment-panel" class="payment-panel collapsible-section" style="text-align: center; width: 100%;">
+                        <button id="client-payment" class="btn btn-lg">Make Payment</button>
+                        <button class="btn btn-lg" id='config-reset' disabled>Reset</button>
+                    </div>
+                    <div id="results-panel" class="collapsible-section">
+                        <h3>Response:</h3>
+                    </div>
+                </div>
+                <div class="config-panel">
+                    <h3>Payment Configuration</h3>
+                    <p><strong style="font-size: 1.2em;">Payment Type: </strong> <button id="config-payment" class="btn btn-toggle selected">Payments</button><button id="config-preauth" class="btn btn-toggle">PreAuth</button></p>
+                    <p><strong style="font-size: 1.2em;">3DS: </strong> <button id="config-3dsOn" class="btn btn-toggle">ON</button><button id="config-3dsOff" class="btn btn-toggle selected">OFF</button></p>
+                </div>
+            </div>
+            <div id="code-panel" class="code-panel"></div>
+        </div>
+    </body>
+</html>

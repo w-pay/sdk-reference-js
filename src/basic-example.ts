@@ -8,7 +8,9 @@ import {
     WPayCustomerOptions,
 } from '@wpay/sdk';
 import * as frames from '@wpay/frames';
-import * as Axios from 'axios';
+import hljs from 'highlight.js/lib/core';
+import javascript from 'highlight.js/lib/languages/javascript';
+hljs.registerLanguage('javascript', javascript);
 
 const secondsSinceEpoch = Math.round(Date.now() / 1000);
 const baseUrl = 'https://dev.mobile-api.woolworths.com.au/wow/v1';
@@ -191,9 +193,17 @@ async function makePayment() {
             ]
         );
 
-        // Display the payment response in the final section of the page.
-        document.getElementById('responseDisplay')!.innerText =
-            JSON.stringify(response);
+        // Display the payment response in the final section of the page.            
+        const responseSection = document.getElementById('responseSection');
+        const pre = document.createElement('pre');
+        pre.classList.add('padding');
+        let resultsContent = JSON.stringify(response, null, '  ');
+        const text = document.createTextNode(resultsContent);
+
+        pre.appendChild(text);
+        responseSection!.appendChild(pre);
+        hljs.highlightElement(pre);
+
         displaySection('responseSection');
         console.log('Payment Response: ', response);
     } catch (error) {
