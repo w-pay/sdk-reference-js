@@ -17,7 +17,10 @@ npm install
 ```
 
 ### Update the Authorization Token
-The authorization token on L21 of index.ts will need to be updated with a newly generated one
+The authorization token on each page will need to be updated with a newly generated one.
+L23 of basic-example.ts
+L131 of client.ts
+L98 of merchant.ts
 
 ```
 let authorizationToken: ApiTokenType = 'MY_NEW_TOKEN';

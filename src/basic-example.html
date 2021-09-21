@@ -1,0 +1,85 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <style>
+            body {
+                font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+                background: #EEE;
+            }
+            .center {
+                margin: 20px auto;
+                width: 60%;
+            }
+            .section {
+                background: #FFF;
+                border-radius: 5px;
+                padding: 0 20px;
+            }
+            .collapsible-section {
+                max-height: 0;
+                overflow: hidden;
+                transition: max-height 0.2s ease-out;
+            }
+            .show {
+                border: solid 1px #777;
+            }
+            button {
+                margin-bottom: 20px;
+            }
+            .card-capture-container {
+                display: flex;
+                flex-direction: column;
+            }
+            #cardCapturePlaceholder {
+                height: 50px;
+                position: relative;
+            }
+            #cardCapturePlaceholder iframe {
+                height: 37px !important;
+                border: solid 1px #777;
+                padding: 5px;
+                border-radius: 5px;
+            }
+            #cardCaptureErrors {
+                height: 30px;
+                color: red;
+            }
+            .padding {
+                padding: 10px;
+            }
+            #responseSection {
+                background: #282c34;
+            }
+            #responseSection > p {
+                color: white;
+            }
+        </style>
+        <link rel="stylesheet" href="atom-one-dark.css">
+    </head>
+    <body>
+        <script type="module" src="./basic-example.js"></script>
+        <h1 class="center">W-Pay JS SDK Example</h1>
+        <div id="cardCaptureSection" class="section center show">
+            <p>First you will need to tokenize a card that can be used to make the payment.</p>
+            <!-- 
+                Card capture placehold div - The Frames SDK will fill this element with the card capture
+                frames.
+            -->
+            <div class="card-capture-container">
+                <div id="cardCapturePlaceholder"></div>
+                <div id="cardCaptureErrors"></div>
+            </div>
+            
+            <button id="submitCard" disabled>Submit</button>
+        </div>
+        <div id="paymentSection" class="section center collapsible-section">
+            <p><b>Payment: </b> $100</p>
+            <p><b>Payment Instrument:</b> <span id="instrumentIdDisplay"></span></p>
+            <p><b>Payment Request:</b> <span id="paymentRequestDisplay"></span></p>
+            <button id="makePayment">Make Payment</button>
+        </div>
+        <div id="responseSection" class="section center collapsible-section">
+            <p><b>Payment Response: </b></p>
+        </div>
+    </body>
+</html>
