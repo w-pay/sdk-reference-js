@@ -29,7 +29,7 @@ const codeExampleContent: any = {
         ');\r\n',
         'action = framesSDK.createAction(frames.ActionTypes.CaptureCard);',
         'await action.start();',
-        'action.createElement("CardGroup", "cardCapturePlaceholder");']
+        'action.createFramesControl("CardGroup", "cardCapturePlaceholder");']
     },
     setupCustomerSDK: {
         heading: 'Setup Customer SDK',
@@ -158,12 +158,12 @@ const errorMap: Map<string, string> = new Map([
 ]);
 
 //Instantiate the frames SDK, this will allow us to capture user card infromation.
-const framesSDK = new frames.ElementsSDK(
-    apiKey,
-    `Bearer ${authorizationToken}`,
-    framesApiBaseUrl,
-    frames.LogLevel.DEBUG
-);
+const framesSDK = new frames.FramesSDK({
+    apiKey: apiKey,
+    authToken: `Bearer ${authorizationToken}`,
+    apiBase: framesApiBaseUrl,
+    logLevel: frames.LogLevel.DEBUG
+});
 
 window.onload = async () => {
     updateCodeExamples(['setupCardCapture']);
@@ -183,14 +183,14 @@ window.onload = async () => {
 
     // Populate the placeholder div with the card capture inputs. In this case we
     // are using the 'CardGroup'
-    action.createElement('CardGroup', 'cardCapturePlaceholder');
+    action.createFramesControl('CardGroup', 'cardCapturePlaceholder');
  
     // Add OnValidated Eventlistener which will cause the updateErrors
     // function to be called if a validation error is encountered in the
     // frames SDK while entering a Credit Card details.
     document.getElementById('cardCapturePlaceholder')!
         .addEventListener(
-            frames.ElementEventType.OnValidated,
+            frames.FramesEventType.OnValidated,
             updateErrors
         );
 
@@ -199,7 +199,7 @@ window.onload = async () => {
     // for submission.
     document.getElementById('cardCapturePlaceholder')!
         .addEventListener(
-            frames.ElementEventType.OnFocus,
+            frames.FramesEventType.OnFocus,
             setVisitedStatus
         );
 
@@ -208,7 +208,7 @@ window.onload = async () => {
     // is ready for submission.
     document.getElementById('cardCapturePlaceholder')!
         .addEventListener(
-            frames.ElementEventType.OnBlur,
+            frames.FramesEventType.OnBlur,
             checkVisitedStatus
         );
 
@@ -271,18 +271,18 @@ async function captureCard() {
         await action.submit();
         const completeResponse = await action.complete();
 
-        if (completeResponse.data.paymentInstrument) {
+        if (completeResponse.paymentInstrument) {
             //A new instrument has been tokenized
             tokenizedInstrument = {
                 paymentInstrumentId:
-                    completeResponse.data.paymentInstrument.itemId,
-                stepUpToken: completeResponse.data.stepUpToken,
+                    completeResponse.paymentInstrument.itemId,
+                stepUpToken: completeResponse.stepUpToken,
             };
         } else {
             //The instrument was already found to exist
             tokenizedInstrument = {
-                paymentInstrumentId: completeResponse.data.itemId,
-                stepUpToken: completeResponse.data.stepUpToken,
+                paymentInstrumentId: completeResponse.itemId,
+                stepUpToken: completeResponse.stepUpToken,
             };
         }
 
